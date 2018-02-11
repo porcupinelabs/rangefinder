@@ -1,3 +1,7 @@
+// Connect Arduino's RX to the LR4's TX, and vice versa.
+// The LR4 uses 3.3V signaling, so depending on your Arduino model you 
+// may have to use level shifters to interface to Arduino's 5V signals.
+
 char measureBuf[6]; // enough space for five digits plus a zero byte
 int offset;
 void setup()
