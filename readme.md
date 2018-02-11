@@ -13,9 +13,13 @@ unzip the contents to a folder on your Windows computer.
 These top level folders contain source code relevant to various OSs and environments:
 
 -> Arduino - Simple example of how to read measurements from the LR4 into an Arduino board using the Arduino's serial interface.
+
 -> Linux - Simple Linux apps written in C, prints measurements to stdout.
+
 -> Matlab - A DLL and H file for use with Matlab.
+
 -> Python - Two simple Python programs, one uses Python's native usb module to talk to the LR4, the second uses a Windows DLL.
+
 -> Windows - Several apps:
 
    LRDemo   - This is a full featured Windows MFC appliaction that demostrates all of the features of the LR4.
