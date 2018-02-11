@@ -7,6 +7,8 @@ programming techniques for interfacing to an LR4 Laser Rangefinder board from Po
 
 The latest version is available at: https://github.com/porcupinelabs/rangefinder
 
+To learn more about the LR4 USB laser rangefinder or buy one go here: http://www.porcupinelabs.com/lr4
+
 If you just want to run the Windows sample apps without getting into source code, then download WindowsApps.zip and then
 unzip the contents to a folder on your Windows computer.
 
