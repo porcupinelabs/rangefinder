@@ -1,6 +1,8 @@
-Porcupine Labs
-LR4 Demo Apps - Rev 6
-Feb 11, 2018
+## Porcupine Labs
+
+# LR4 Demo Apps - Rev 6
+
+# Feb 11, 2018
 
 This repository contains demo applications along with full source for each.  These applications demonstrate
 programming techniques for interfacing to an LR4 Laser Rangefinder board from Porcupine Labs.
