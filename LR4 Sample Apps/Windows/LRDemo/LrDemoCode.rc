@@ -1,0 +1,298 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Laser Rangefinder Demo"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "Laser Rangefinder Demo Version 1.1",IDC_STATIC,40,11,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2016, Porcupine Electronics, LLC",IDC_STATIC,40,25,157,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+    LTEXT           "www.PorcupineElectronics.com",IDC_STATIC,40,39,157,8
+END
+
+IDD_LRDEMOCODE_DIALOG DIALOGEX 0, 0, 314, 242
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Laser Rangefinder Demo - Porcupine Electronics"
+FONT 8, "MS Sans Serif", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Start",IDC_START,18,15,50,28
+    LTEXT           "0",IDC_DISTANCE,81,23,82,15,SS_SUNKEN
+    GROUPBOX        "Rangefinder Control",IDC_ControlGroup,6,62,301,104
+    LTEXT           "Distance Display",IDC_STATIC_DISTANCE_DISPLAY,28,77,54,8
+    COMBOBOX        IDC_DISTANCE_DISPLAY,88,75,95,64,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Measurement Mode",IDC_STATIC_MEASUREMENT_MODE,18,91,64,8
+    COMBOBOX        IDC_MEASUREMENT_MODE,88,89,95,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Interval",IDC_STATIC_INTERVAL,58,106,24,8
+    EDITTEXT        IDC_INTERVAL,88,104,28,12,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_INTERVAL_SPIN,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_HOTTRACK,115,103,11,14
+    COMBOBOX        IDC_INTERVAL_UNITS,135,104,48,56,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Trigger",IDC_STATIC_TRIGGER,59,121,23,8
+    COMBOBOX        IDC_TRIGGER,88,119,95,65,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Keyboard Emulation Mode",IDC_KB_EMULATION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,76,99,10
+    CONTROL         "Do Double Measurements",IDC_DO_DOUBLE_MEASUREMENTS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,90,98,10
+    CONTROL         "Don't Filter Errors",IDC_DONT_FILTER_ERRORS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,104,69,10
+    CONTROL         "Only Send Changes",IDC_ONLY_SEND_CHANGES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,118,79,10
+    PUSHBUTTON      "Save to Rangefinder",IDC_BUTTON_SAVE,107,143,76,14
+    GROUPBOX        "Rangefinder Status",IDC_STATUS,6,172,245,57
+    LTEXT           "Model",IDC_MODEL,12,191,85,8
+    LTEXT           "Status Code",IDC_STATIC,141,180,40,8
+    LTEXT           "000",IDC_STATUS_CODE,187,179,58,12,SS_SUNKEN
+    LTEXT           "Measurement Count",IDC_STATIC,117,196,64,8
+    LTEXT           "0",IDC_MEASUREMENT_COUNT,187,193,58,12,SS_SUNKEN
+    PUSHBUTTON      "Exit",IDCANCEL,257,214,50,14,NOT WS_TABSTOP
+    CONTROL         137,IDC_STATIC,"Static",SS_BITMAP,177,2,129,62
+    LTEXT           "Manufacturer",IDC_MANUFACTURER,12,182,85,8
+    LTEXT           "HW",IDC_HW_VERSION,12,200,85,8
+    LTEXT           "FW",IDC_FW_VERSION,12,209,85,8
+    LTEXT           "Serial",IDC_SERIAL_NUMBER,12,218,85,8
+    CONTROL         "Ignore Lock Key Off-to-On",IDC_IGNORE_OFF_TO_ON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,132,99,10
+    CONTROL         "Ignore Lock Key On-to-Off",IDC_IGNORE_ON_TO_OFF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,199,146,99,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Porcupine Electronics"
+            VALUE "FileDescription", "Laser Rangefinder Demo"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "Laser Rangefinder Demo"
+            VALUE "LegalCopyright", "Copyright (C) 2010, Porcupine Electronics, LLC"
+            VALUE "OriginalFilename", "LrDemo.exe"
+            VALUE "ProductName", "Laser Rangefinder Demo"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_LRDEMOCODE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 307
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 235
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_LRDEMOCODE_DIALOG DLGINIT
+BEGIN
+    IDC_DISTANCE_DISPLAY, 0x403, 14, 0
+0x6546, 0x7465, 0x2620, 0x4920, 0x636e, 0x6568, 0x0073, 
+    IDC_DISTANCE_DISPLAY, 0x403, 7, 0
+0x654d, 0x6574, 0x7372, "\000" 
+    IDC_DISTANCE_DISPLAY, 0x403, 5, 0
+0x6546, 0x7465, "\000" 
+    IDC_DISTANCE_DISPLAY, 0x403, 7, 0
+0x6e49, 0x6863, 0x7365, "\000" 
+    IDC_DISTANCE_DISPLAY, 0x403, 12, 0
+0x6543, 0x746e, 0x6d69, 0x7465, 0x7265, 0x0073, 
+    IDC_MEASUREMENT_MODE, 0x403, 11, 0
+0x6f43, 0x746e, 0x6e69, 0x6f75, 0x7375, "\000" 
+    IDC_MEASUREMENT_MODE, 0x403, 7, 0
+0x6953, 0x676e, 0x656c, "\000" 
+    IDC_MEASUREMENT_MODE, 0x403, 9, 0
+0x6e49, 0x6574, 0x7672, 0x6c61, "\000" 
+    IDC_INTERVAL_UNITS, 0x403, 8, 0
+0x6553, 0x6f63, 0x646e, 0x0073, 
+    IDC_INTERVAL_UNITS, 0x403, 8, 0
+0x694d, 0x756e, 0x6574, 0x0073, 
+    IDC_INTERVAL_UNITS, 0x403, 6, 0
+0x6f48, 0x7275, 0x0073, 
+    IDC_TRIGGER, 0x403, 15, 0
+0x5322, 0x6174, 0x7472, 0x2022, 0x7542, 0x7474, 0x6e6f, "\000" 
+    IDC_TRIGGER, 0x403, 14, 0
+0x6143, 0x7370, 0x4c20, 0x636f, 0x206b, 0x654b, 0x0079, 
+    IDC_TRIGGER, 0x403, 13, 0
+0x754e, 0x206d, 0x6f4c, 0x6b63, 0x4b20, 0x7965, "\000" 
+    IDC_TRIGGER, 0x403, 16, 0
+0x6353, 0x6f72, 0x6c6c, 0x4c20, 0x636f, 0x206b, 0x654b, 0x0079, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "res\\bitmap1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_ABOUTBOX            "&About LrDemo..."
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\LRDemoCode.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Sys. Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\LRDemoCode.ico"
+#endif    // Neutral (Sys. Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\LRDemoCode.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

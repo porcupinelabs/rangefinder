@@ -1,0 +1,102 @@
+﻿<Window x:Class="LxDemo.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:MyNamespace="clr-namespace:LxDemo"
+    Title="LrTank v2.01" Height="Auto" Width="949" Background="#FF2B3C59" Margin="0" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignWidth="670" d:DesignHeight="706" SizeToContent="Height">
+    <Grid Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel Height="57" Name="stackPanel2" VerticalAlignment="Top" Background="#FF35496A" Orientation="Horizontal" Margin="10,0">
+            <Button Content="Start" Height="37" Name="buttonStart" Width="71" Click="ButtonStartClick" IsEnabled="True" IsDefault="True" Margin="10" />
+        </StackPanel>
+        <StackPanel Background="#FF35496A" Name="stackPanel22" Orientation="Horizontal" Margin="10,75,10,10" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Top">
+            <StackPanel Name="stackPanel1" Background="#FF35496A" Margin="10">
+                <StackPanel Height="135" Name="stackPanel4" Background="White">
+                    <Label Content="Tank 1 Level (tons)" Height="28" Name="label2" />
+                    <TextBox Height="67" Name="MeasTxt" Width="153" Margin="10" FontSize="32" TextAlignment="Center" FontWeight="Bold" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                </StackPanel>
+                <StackPanel Name="stackPanel5" Background="#FF35496A">
+                    <StackPanel Height="25" Name="stackPanel11" Orientation="Horizontal" Width="180">
+                        <Label Content="Filling Mode" Foreground="White" Height="28" Name="label10" Width="120" />
+                        <CheckBox Height="16" Name="checkBoxFilling" Click="checkBoxFillingClick" />
+                    </StackPanel>
+                    <StackPanel Height="25" Name="stackPanel8" Width="180" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="Tank Height(m):" Height="28" Name="label8" Width="120" Foreground="White" />
+                        <TextBox Height="20" Name="textBoxTankHeight" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" Name="stackPanel9" Width="180" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="Tank Capacity(tons):" Height="28" Name="label9" Width="120" Foreground="White" />
+                        <TextBox Height="20" Name="textBoxTankCapacity" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" Name="stackPanel3" Width="180" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="Distance:" Height="28" Name="label1" Width="120" Foreground="White" />
+                        <TextBox Height="20" Name="textBoxDistance" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" Name="stackPanel6" Width="180" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="Status Code:" Height="28" Name="label4" Width="120" Foreground="White" />
+                        <TextBox Height="20" Name="textBoxStatus" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" Name="stackPanel7" Width="180" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="Measurement Count:" Height="28" Name="label5" Width="120" Foreground="White" />
+                        <TextBox Height="20" Name="textBoxCount" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <GroupBox Header="Rangefinder Status" Name="groupBox1" Width="180" Foreground="White">
+                        <Grid>
+                            <StackPanel Name="stackPanel10" Background="#FF35496A" Margin="2">
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockAttachStatus" Text="Searching..." Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockManufacturer" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockModel" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockHwVersion" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockFwVersion" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockSerialNumber" Width="171" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </StackPanel>
+            <Canvas Height="550" Name="tankCanvas" Width="480" Background="White" Margin="10" />
+            <StackPanel Background="#FF35496A" Name="stackPanel12" Margin="10">
+                <StackPanel Background="White" Height="135" Name="stackPanel13">
+                    <Label Content="Tank 2 Level (tons)" Height="28" Name="label3" />
+                    <TextBox FontSize="32" FontWeight="Bold" Height="67" Margin="10" Name="MeasTxt2" TextAlignment="Center" Width="153" IsReadOnly="True" />
+                </StackPanel>
+                <StackPanel Background="#FF35496A" Name="stackPanel14">
+                    <StackPanel Height="25" Name="stackPanel17" Orientation="Horizontal" Width="180">
+                        <Label Content="Filling Mode" Foreground="White" Height="28" Name="label11" Width="120" />
+                        <CheckBox Height="16" Name="checkBoxFilling2" Click="checkBoxFillingClick2" />
+                    </StackPanel>
+                    <StackPanel Height="25" HorizontalAlignment="Left" Name="stackPanel15" Orientation="Horizontal" Width="180">
+                        <Label Content="Tank Height(m):" Foreground="White" Height="28" Name="label6" Width="120" />
+                        <TextBox Height="20" HorizontalContentAlignment="Right" IsReadOnly="True" Name="textBoxTankHeight2" Width="60" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" HorizontalAlignment="Left" Name="stackPanel16" Orientation="Horizontal" Width="180">
+                        <Label Content="Tank Capacity(tons):" Foreground="White" Height="28" Name="label7" Width="120" />
+                        <TextBox Height="20" HorizontalContentAlignment="Right" IsReadOnly="True" Name="textBoxTankCapacity2" Width="60" Background="#FF2B3C59" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Height="25" HorizontalAlignment="Left" Name="stackPanel18" Orientation="Horizontal" Width="180">
+                        <Label Content="Distance:" Foreground="White" Height="28" Name="label12" Width="120" />
+                        <TextBox Background="#FF2B3C59" Foreground="White" Height="20" HorizontalContentAlignment="Right" IsReadOnly="True" Name="textBoxDistance2" Width="60" />
+                    </StackPanel>
+                    <StackPanel Height="25" HorizontalAlignment="Left" Name="stackPanel19" Orientation="Horizontal" Width="180">
+                        <Label Content="Status Code:" Foreground="White" Height="28" Name="label13" Width="120" />
+                        <TextBox Background="#FF2B3C59" Foreground="White" Height="20" HorizontalContentAlignment="Right" IsReadOnly="True" Name="textBoxStatus2" Width="60" />
+                    </StackPanel>
+                    <StackPanel Height="25" HorizontalAlignment="Left" Name="stackPanel20" Orientation="Horizontal" Width="180">
+                        <Label Content="Measurement Count:" Foreground="White" Height="28" Name="label14" Width="120" />
+                        <TextBox Background="#FF2B3C59" Foreground="White" Height="20" HorizontalContentAlignment="Right" IsReadOnly="True" Name="textBoxCount2" Width="60" />
+                    </StackPanel>
+                    <GroupBox Foreground="White" Header="Rangefinder Status" Name="groupBox2" Width="180">
+                        <Grid>
+                            <StackPanel Background="#FF35496A" Margin="2" Name="stackPanel21">
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockAttachStatus2" Text="Searching..." Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockManufacturer2" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockModel2" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockHwVersion2" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockFwVersion2" Width="171" />
+                                <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockSerialNumber2" Width="171" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
