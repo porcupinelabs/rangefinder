@@ -12,22 +12,22 @@ using System.Windows.Input;
 using System.IO;
 using Microsoft.Win32;
 
-
-
-namespace LxDemo
+namespace LrDemo
 {
 	public partial class MainWindow : Window {
 
+        private static Aimer Aim;
         private static readonly int[] SupportedDevices = new[] { 0xDD03 };
         private static lr4 lx4Device;
         private byte[] productInfoBuf = new byte[100];
         private bool LrfStarted = false;
-
         private static int measurementCount = 0;
+        private static double[] UnitsMuliplierTable = new double[5] {3.28084, 1.0, 3.28084, 39.3701, 100}; // 0=Feet/Inches, 1=Meters, 2=Feet, 3=Inches, 4=Centimeters
 
         public MainWindow()
         {
 			InitializeComponent();
+            Aim = new Aimer(canvasAim);
 
             lx4Device = lr4.Enumerate(SupportedDevices).FirstOrDefault();
             if (lx4Device != null)
@@ -40,6 +40,8 @@ namespace LxDemo
                 //lx4Device.StopListen();
                 //lx4Device.Dispose();
             }
+            rsAimX.Changed += AimingChanged;
+            rsAimY.Changed += AimingChanged;
         }
 
         private void ButtonStartClick(object sender, RoutedEventArgs e)
@@ -66,7 +68,7 @@ namespace LxDemo
                 textBlockAttachStatus.Text = "Attached";
                 buttonStart.Content = "Start";
                 buttonStart.IsEnabled = true;
-                lx4Device.GetProductInfoSnippet(0);
+                lx4Device.ReadAllConfigStart();
             }));
             LrfStarted = false;
             Console.WriteLine("LX4 attached");
@@ -121,6 +123,21 @@ namespace LxDemo
                         lx4Device.GetProductInfoSnippet(offset);
                     else HandleNewProductInfo();
                     break;
+                case 0x03:  // GetConfigItem data
+                    string getResult = Encoding.UTF8.GetString(data, 1, 7);
+                    string[] parsedResult = getResult.Split('=');
+                    int val;
+                    if (Int32.TryParse(parsedResult[1], out val))
+                        HandleNewCfgItemData(parsedResult[0], val);
+                    lx4Device.ReadAllConfigNext();
+                    break;
+                case 0x04:  // Write config result
+                    int result = data[1];
+                    if (result == 0)
+                        System.Windows.Forms.MessageBox.Show("Configuration settings were saved to the rangefinder's internal flash memory.  These settings will remain even after the rangefinder is unplugged / powered off.");
+                    else
+                        System.Windows.Forms.MessageBox.Show("There was an error while trying to save settings to the rangefinder's internal flash memory.");
+                    break;
             }
         }
 
@@ -141,14 +158,244 @@ namespace LxDemo
 
         private void HandleDistanceData(byte[] data)
         {
+            double Feet, Inches, Meters, Centimeters;
+            int iFeet;
             ++measurementCount;
             textBoxCount.Text = System.Convert.ToString(measurementCount);
 
-            int millimeters = (data[2] << 8) + data[1];
-            double meters = (double)millimeters * 0.001;
-            textBoxDistance.Text = String.Format("{0,8:F3}", meters);
-            textBoxStatus.Text = String.Format("{0:X4} {1:X2}", (data[4]<<8)+data[5], data[6]);
+            int Millimeters = (data[2] << 8) + data[1];
+            switch (cbUnits.SelectedIndex)
+            {
+                case 0:         // Feet and inches
+                    Inches = Millimeters / 25.4;
+                    iFeet = (int)(Inches / 12);
+                    Inches -= iFeet * 12;
+                    textBoxDistance.Text = String.Format("{0:0}' {1:F1}\"", iFeet, Inches);
+                    break;
+                case 1:         // Meters
+                    Meters = (double)Millimeters * 0.001;
+                    textBoxDistance.Text = String.Format("{0:F3} m", Meters);
+                    break;
+                case 2:         // Feet
+                    Feet = ((double)Millimeters / 25.4) / 12;
+                    textBoxDistance.Text = String.Format("{0:F2}'", Feet);
+                    break;
+                case 3:         // Inches
+                    Inches = (double)Millimeters / 25.4;
+                    textBoxDistance.Text = String.Format("{0:F1}\"", Inches);
+                    break;
+                case 4:         // Centimeters
+                    Centimeters = (double)Millimeters / 10;
+                    textBoxDistance.Text = String.Format("{0:F1} cm", Centimeters);
+                    break;
+               default:        // Error
+                    textBoxDistance.Text = "Error";
+                    break;
+            }
+
+            if (data[3] == 0)  // Not advanced mode (LR4)
+            {
+                textBoxStatus.Text = String.Format("{0:X4} {1:X2}", (data[4] << 8) + data[5], data[6]);
+            }
+            else    // Advanced mode (Micro LRF)
+            {
+                textBoxStatus.Text = String.Format("{0:X2}", data[6]);
+
+                double SignalStrength = data[3] / 2.55;
+                BarSignalStrength.SetBarPercent(SignalStrength);
+                textBoxSignalStrength.Text = String.Format("{0:F0}%", SignalStrength);
+
+                double AmbientIR = data[4] / 2.55;
+                barAmbientIR.SetBarPercent(AmbientIR);
+                textBoxAmbientIR.Text = String.Format("{0:F0}%", AmbientIR);
+
+                double Uncertainty = data[5];
+                barUncertainty.SetBarPercent(Uncertainty);
+                textBoxUncertainty.Text = String.Format("{0:F1}mm", Uncertainty/10);
+            }
+
+            rangeChart.AddDataPoint((double)Millimeters/1000);
         }
-    
+
+
+        private void HandleNewCfgItemData(string cfgItem, int val)
+        {
+            switch (cfgItem)
+            {
+                case "run":
+                    if (val == 0)
+                    {
+                        buttonStart.Content = "Start";
+                        LrfStarted = false;
+                    }
+                    else
+                    {
+                        buttonStart.Content = "Stop";
+                        LrfStarted = true;
+                    }
+                    break;
+                case "uni":
+                    cbUnits.SelectedIndex = val;
+                    break;
+                case "mod":
+                    cbMeasurementMode.SelectedIndex = val;
+                    break;
+                case "int":
+                    tbInterval.Text = val.ToString();
+                    break;
+                case "iun":
+                    cbIntervalUnits.SelectedIndex = val;
+                    break;
+                case "trg":
+                    cbTrigger.SelectedIndex = val;
+                    break;
+                case "kbd":
+                    tsKeyboardEmulation.State = (val != 0);
+                    break;
+                case "dbl":
+                    tsDoDoubleMeasurements.State = (val != 0);
+                    break;
+                case "nfl":
+                    tsDontFilterErrors.State = (val != 0);
+                    break;
+                case "chg":
+                    tsOnlySendChanges.State = (val != 0);
+                    break;
+                case "rmd":
+                    cbRangeMode.SelectedIndex = val;
+                    break;
+                case "mrt":
+                    slMeasurementRate.Value = val;
+                    lblMeasurementRate.Content = "Measurement Rate: " + val.ToString() + " Hz";
+                    break;
+                case "bx1":
+                    rsAimX.LoValue = val;
+                    break;
+                case "by1":
+                    rsAimY.LoValue = val;
+                    break;
+                case "bx2":
+                    rsAimX.HiValue = val;
+                    rsAimX.DrawControl();
+                    break;
+                case "by2":
+                    rsAimY.HiValue = val;
+                    rsAimY.DrawControl();
+                    Aim.SetAiming(rsAimX.LoValue, rsAimY.LoValue, rsAimX.HiValue, rsAimY.HiValue);
+                    double Xdeg = (27 * (rsAimX.HiValue - rsAimX.LoValue) / 15);
+                    double Ydeg = (27 * (rsAimY.HiValue - rsAimY.LoValue) / 15);
+                    textBoxSignalBeamSteering.Text = String.Format("{0:F0}° x {1:F0}°", Xdeg, Ydeg);
+                    break;
+
+            }
+        }
+        
+
+        private void cbUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            uint val = (uint)cbUnits.SelectedIndex;  // 0=Feet/Inches, 1=Meters, 2=Feet, 3=Inches, 4=Centimeters
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("uni", val);
+            if ((val < 5) && (rangeChart != null))
+                rangeChart.SetMultiplier(UnitsMuliplierTable[val]);
+        }
+
+        private void cbMeasurementMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            uint val = (uint)cbMeasurementMode.SelectedIndex;
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("mod", val);
+        }
+
+        private void cbTrigger_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            uint val = (uint)cbTrigger.SelectedIndex;
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("trg", val);
+        }
+
+        private void tbInterval_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            uint val;
+            if (UInt32.TryParse(tbInterval.Text, out val))
+                if ((val > 0) && (val <= 99))
+                    if (lx4Device != null)
+                        lx4Device.SetConfigItem("int", val);
+        }
+
+        private void cbIntervalUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            uint val = (uint)cbIntervalUnits.SelectedIndex;  // 0=Short, 1=Medium, 2=Long
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("iun", val);
+        }
+
+        private void cbRangeMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            uint val = (uint)cbRangeMode.SelectedIndex;  // 0=Short, 1=Medium, 2=Long
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("rmd", val);
+        }
+
+        private void tsKeyboardEmulation_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            uint val = (uint)(tsKeyboardEmulation.State ? 1 : 0);
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("kbd", val);
+        }
+
+        private void tsDoDoubleMeasurements_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            uint val = (uint)(tsDoDoubleMeasurements.State ? 1 : 0);
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("dbl", val);
+        }
+
+        private void tsDontFilterErrors_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            uint val = (uint)(tsDontFilterErrors.State ? 1 : 0);
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("nfl", val);
+        }
+
+        private void tsOnlySendChanges_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            uint val = (uint)(tsOnlySendChanges.State ? 1 : 0);
+            if (lx4Device != null)
+                lx4Device.SetConfigItem("chg", val);
+        }
+
+        private void slMeasurementRate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            uint val;
+            val = (uint)slMeasurementRate.Value;
+            if ((val > 0) && (val <= 100))
+            {
+                lblMeasurementRate.Content = "Measurement Rate: " + val.ToString() + " Hz";
+                if (lx4Device != null)
+                    lx4Device.SetConfigItem("mrt", val);
+            }
+        }
+
+        private void AimingChanged(object sender, EventArgs e)
+        {
+            Aim.SetAiming(rsAimX.LoValue, rsAimY.LoValue, rsAimX.HiValue, rsAimY.HiValue);
+            double Xdeg = (27 * (rsAimX.HiValue - rsAimX.LoValue) / 15);
+            double Ydeg = (27 * (rsAimY.HiValue - rsAimY.LoValue) / 15);
+            textBoxSignalBeamSteering.Text = String.Format("{0:F0}° x {1:F0}°", Xdeg, Ydeg);
+            if (lx4Device != null)
+            {
+                lx4Device.SetConfigItem("bx1", (uint)rsAimX.LoValue);
+                lx4Device.SetConfigItem("by1", (uint)rsAimY.LoValue);
+                lx4Device.SetConfigItem("bx2", (uint)rsAimX.HiValue);
+                lx4Device.SetConfigItem("by2", (uint)rsAimY.HiValue);
+            }
+        }
+
+        private void btnSaveConfig_Click(object sender, RoutedEventArgs e)
+        {
+            if (lx4Device != null)
+                lx4Device.SaveConfig();
+        }
     }
 }

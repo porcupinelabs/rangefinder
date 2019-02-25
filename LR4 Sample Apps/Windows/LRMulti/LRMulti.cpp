@@ -190,7 +190,7 @@ ExitFromApp:
 BOOLEAN GetConfiguration (unsigned int Instance)
 {
 	int Result;
-	UCHAR CmdBuf[9], StatusBuf[8];
+	UCHAR CmdBuf[10], StatusBuf[8];
 
 	CmdBuf[0] = 0;	// This is the report ID, since the LR3 only supports one output
 					// report, Windows strips this off and sends rest of command (8 bytes).
@@ -202,9 +202,10 @@ BOOLEAN GetConfiguration (unsigned int Instance)
 	CmdBuf[6] = 0;
 	CmdBuf[7] = 0;
 	CmdBuf[8] = 0;
+	CmdBuf[9] = 0;
 
-	Result = hid_write(handle[Instance], CmdBuf, 9);
-	if (Result != 9)
+	Result = hid_write(handle[Instance], CmdBuf, 10);
+	if (Result != 10)
 		return FALSE;
 
 	// In a few milliseconds the rangefinder will respond with an Out report packet
@@ -228,7 +229,7 @@ BOOLEAN GetConfiguration (unsigned int Instance)
 
 BOOLEAN SetConfiguration (unsigned int Instance)
 {
-	UCHAR CmdBuf[9];
+	UCHAR CmdBuf[10];
 
 	CmdBuf[0] = 0;	// This is the report ID, since the LR3 only supports one output
 					// report, Windows strips this off and sends rest of command (8 bytes).
@@ -240,8 +241,9 @@ BOOLEAN SetConfiguration (unsigned int Instance)
 	CmdBuf[6] = 0;
 	CmdBuf[7] = 0;
 	CmdBuf[8] = 0;
+	CmdBuf[9] = 0;
 
-	return (hid_write(handle[Instance], CmdBuf, 9) == 9); 
+	return (hid_write(handle[Instance], CmdBuf, 10) == 10); 
 }
 
 
@@ -287,7 +289,7 @@ BOOLEAN GetProductInfo (PRODUCT_INFO *pProductInfo, unsigned int Instance)
 {
 	int Result;
 	unsigned int i;
-	UCHAR Offset, CmdBuf[9], StatusBuf[8], *pOutputBuf;
+	UCHAR Offset, CmdBuf[10], StatusBuf[8], *pOutputBuf;
 
 	pOutputBuf = (UCHAR *)pProductInfo;
 	for (Offset=0; Offset<sizeof(PRODUCT_INFO); Offset+=6) {
@@ -302,9 +304,10 @@ BOOLEAN GetProductInfo (PRODUCT_INFO *pProductInfo, unsigned int Instance)
 		CmdBuf[6] = 0;
 		CmdBuf[7] = 0;
 		CmdBuf[8] = 0;
+		CmdBuf[9] = 0;
 
-		Result = hid_write(handle[Instance], CmdBuf, 9);
-		if (Result != 9)
+		Result = hid_write(handle[Instance], CmdBuf, 10);
+		if (Result != 10)
 			return FALSE;
 
 		// In a few milliseconds the rangefinder will respond with an Out report packet

@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("LxDemo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Porcupine Electronics")]
-[assembly: AssemblyProduct("LxDemo")]
-[assembly: AssemblyCopyright("Copyright © Porcupine Electronics LLC 2013")]
+[assembly: AssemblyCompany("Porcupine Labs")]
+[assembly: AssemblyProduct("LrDemo")]
+[assembly: AssemblyCopyright("Copyright © Porcupine Labs, 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -3,24 +3,52 @@ using System.Collections.Generic;
 using System.Threading;
 using HidLibrary;
 using System.Linq;
+using System.Text;
 
-namespace LxDemo
+namespace LrDemo
 {
     public class lr4 : IDisposable
     {
-	    private const int Lx4VendorId = 0x0417;
+        private const int Lx4VendorId = 0x0417;
+        private uint InitState = 0;
 
-	    public event InsertedEventHandler Inserted;
-	    public event RemovedEventHandler Removed;
-	    public event DataRecievedEventHandler DataRecieved;
-        
+        public event InsertedEventHandler Inserted;
+        public event RemovedEventHandler Removed;
+        public event DataRecievedEventHandler DataRecieved;
+
         public delegate void InsertedEventHandler();
-	    public delegate void RemovedEventHandler();
-	    public delegate void DataRecievedEventHandler(byte[] data);
+        public delegate void RemovedEventHandler();
+        public delegate void DataRecievedEventHandler(byte[] data);
 
-	    private readonly HidDevice lx4Device;
+        private readonly HidDevice lx4Device;
         private int _isReading;
 
+        struct cfgItem
+        {
+            public string itemName;
+            public int BlahBlah;
+        }
+
+        static cfgItem[] cfgItemTable = new cfgItem[] {
+            new cfgItem{itemName = "000", BlahBlah = 0},    // Nothing (idle state)
+            new cfgItem{itemName = "run", BlahBlah = 0},    // Run/Stop
+            new cfgItem{itemName = "uni", BlahBlah = 0},    // Units
+            new cfgItem{itemName = "mod", BlahBlah = 0},    // Mode
+            new cfgItem{itemName = "int", BlahBlah = 0},    // Interval
+            new cfgItem{itemName = "iun", BlahBlah = 0},    // Interval units
+            new cfgItem{itemName = "trg", BlahBlah = 0},    // Trigger
+            new cfgItem{itemName = "kbd", BlahBlah = 0},    // Keyboard emulation
+            new cfgItem{itemName = "dbl", BlahBlah = 0},    // Do double measurements
+            new cfgItem{itemName = "nfl", BlahBlah = 0},    // Don't filter errors
+            new cfgItem{itemName = "chg", BlahBlah = 0},    // Only send changes
+            new cfgItem{itemName = "rmd", BlahBlah = 0},    // Range mode
+            new cfgItem{itemName = "mrt", BlahBlah = 0},    // Measurement rate
+            new cfgItem{itemName = "bx1", BlahBlah = 0},    // Aiming X1
+            new cfgItem{itemName = "by1", BlahBlah = 0},    // Aiming Y1
+            new cfgItem{itemName = "bx2", BlahBlah = 0},    // Aiming X2
+            new cfgItem{itemName = "by2", BlahBlah = 0}     // Aiming Y2
+        };
+    
 	    public lr4(string devicePath) : this(HidDevices.GetDevice(devicePath)) { }
 
 	    public lr4(HidDevice hidDevice)
@@ -46,8 +74,35 @@ namespace LxDemo
             return HidDevices.Enumerate(Lx4VendorId, productIds).Select(x => new lr4(x));
 	    }
 
+        // Starts an initialization state machine that reads the current state all of the rangefinder's
+        // configurable settings in order to initialize the app's UI the reflect the state these settings.
+        public void ReadAllConfigStart()
+        {
+            InitState = 1;
+            ReadAllConfigNext();
 
-	    public void StartListen() { IsListening = true; }
+        }
+
+        // Used by the initialization state machine to read the next setting from the rangefinder
+        public void ReadAllConfigNext()
+        {
+            if (InitState == 0)
+            {
+                // Do nothing
+            }
+            else if ((InitState > 0) && (InitState < cfgItemTable.Length))
+            {
+                GetConfigItem(cfgItemTable[InitState].itemName);
+                ++InitState;
+            }
+            else
+            {
+                InitState = 0;
+                GetProductInfoSnippet(0);
+            }
+        }
+
+        public void StartListen() { IsListening = true; }
 	    public void StopListen() { IsListening = false; }
 
         public void SetConfigStart()
@@ -59,6 +114,7 @@ namespace LxDemo
             report.Data[2] = 0x80;  // ConfigValue (msb)
             report.Data[3] = 0x01;  // ConfigInterval (lsb)
             report.Data[4] = 0x00;  // ConfigInterval (msb)
+            report.Data[5] = 0x01;  // Bit 0: Enable advanced mode
             lx4Device.WriteReport(report);
         }
 
@@ -71,24 +127,15 @@ namespace LxDemo
             report.Data[2] = 0x00;  // ConfigValue (msb)
             report.Data[3] = 0x01;  // ConfigInterval (lsb)
             report.Data[4] = 0x00;  // ConfigInterval (msb)
+            report.Data[5] = 0x01;  // Bit 0: Enable advanced mode
             lx4Device.WriteReport(report);
         }
 
-        public void EnableCalibrationData()
+        public void SaveConfig()
         {
             var report = lx4Device.CreateReport();
             report.ReportId = 0x00;
-            report.Data[0] = 0x10;
-            report.Data[1] = 0x01;
-            lx4Device.WriteReport(report);
-        }
-
-        public void DisableCalibrationData()
-        {
-            var report = lx4Device.CreateReport();
-            report.ReportId = 0x00;
-            report.Data[0] = 0x10;
-            report.Data[1] = 0x00;
+            report.Data[0] = 0x02;
             lx4Device.WriteReport(report);
         }
 
@@ -100,7 +147,40 @@ namespace LxDemo
             report.Data[1] = (byte)offset;
             lx4Device.WriteReport(report);
         }
-            
+
+        public void SetConfigItem(String item, uint value)
+        {
+            if (InitState != 0)
+                return;     // Init state machine is running so don't send commands to the rangefinder
+            var report = lx4Device.CreateReport();
+            String cmd = item + '=' + value.ToString();
+            byte[] cmdBytes = Encoding.ASCII.GetBytes(cmd);
+            byte[] reportBytes = new byte[cmdBytes.Length + 1];
+            cmdBytes.CopyTo(reportBytes, 1);
+            reportBytes[0] = 0x05;
+            if (reportBytes.Length <= 8)
+            {
+                report.ReportId = 0x00;
+                report.Data = reportBytes;
+                lx4Device.WriteReport(report);
+            }
+        }
+
+        public void GetConfigItem(String item)
+        {
+            var report = lx4Device.CreateReport();
+            byte[] cmdBytes = Encoding.ASCII.GetBytes(item);
+            byte[] reportBytes = new byte[cmdBytes.Length + 1];
+            cmdBytes.CopyTo(reportBytes, 1);
+            reportBytes[0] = 0x04;
+            if (reportBytes.Length <= 8)
+            {
+                report.ReportId = 0x00;
+                report.Data = reportBytes;
+                lx4Device.WriteReport(report);
+            }
+        }
+
         private void BeginReadReport()
 	    {
 		    if (Interlocked.CompareExchange(ref _isReading, 1, 0) == 1)

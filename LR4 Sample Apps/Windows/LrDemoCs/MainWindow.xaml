@@ -1,35 +1,207 @@
-﻿<Window x:Class="LxDemo.MainWindow"
+﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="LrDemo" Height="375" Width="225" Background="#FF2B3C59">
-    <Grid>
-        <StackPanel Name="stackPanel1" Background="#FF35496A" Margin="0,32,0,0" HorizontalAlignment="Left" Width="200">
-            <Button Content="Start" Height="37" Name="buttonStart" Width="71" Margin="0,5,0,20" Click="ButtonStartClick" IsEnabled="False" IsDefault="True" />
-            <StackPanel Height="25" Name="stackPanel3" Width="180" Orientation="Horizontal">
-                <Label Content="Distance:" Height="28" Name="label1" Width="120" Foreground="White" />
-                <TextBox Height="20" Name="textBoxDistance" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" />
+    xmlns:local="clr-namespace:LrDemo" x:Class="LrDemo.MainWindow"
+    Title="LrDemo" Height="640" Width="960 " Background="#FF13171A">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="HorizontalSliderTrackNormalBackground" Color="#FFFF7F00"/>
+        <SolidColorBrush x:Key="HorizontalSliderTrackNormalBorder" Color="#FFFF7F00"/>
+        <Style x:Key="SliderLeftRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="Transparent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SliderRightRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="#FFA0A0A0" RadiusX="10" RadiusY="10" Margin="-18,0,0,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomThumbForSlider" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Ellipse Fill="#FFFFFFFF" Stroke="#FFFFFFFF" Height="18" Width="18"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MyCustomStyleForSlider" TargetType="{x:Type Slider}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Slider}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TickBar x:Name="TopTick" Visibility="Collapsed" Fill="{TemplateBinding Foreground}" Placement="Top" Height="4" Grid.Row="0"/>
+                                <TickBar x:Name="BottomTick" Visibility="Collapsed" Fill="{TemplateBinding Foreground}" Placement="Bottom" Height="4" Grid.Row="0"/>
+                                <Border x:Name="TrackBackground" 
+                                        Background="{StaticResource HorizontalSliderTrackNormalBackground}"
+                                        BorderBrush="{StaticResource HorizontalSliderTrackNormalBorder}"                                        
+                                        BorderThickness="1" CornerRadius="9"
+                                        Margin="0,0" VerticalAlignment="Center" Height="18" Grid.Row="1">
+                                    <Canvas Margin="-6,-1">
+                                        <Rectangle Visibility="Hidden" x:Name="PART_SelectionRange" Height="4.0"
+                                                   Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                                                   Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
+                                                   StrokeThickness="1.0"/>
+                                    </Canvas>
+                                </Border>
+                                <Track x:Name="PART_Track" Grid.Row="1">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton  Style="{StaticResource  SliderLeftRepeatButtonStyle}" Command="{x:Static Slider.DecreaseLarge}"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Style="{StaticResource SliderRightRepeatButtonStyle}" Command="{x:Static Slider.IncreaseLarge}"/>
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb x:Name="Thumb" Style="{StaticResource CustomThumbForSlider}" Background="Black"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+
+
+    <Grid Margin="0,0,0,0" Height="620" VerticalAlignment="Top">
+        <Grid HorizontalAlignment="Left" Height="127" Margin="263,347,0,0" VerticalAlignment="Top" Width="238" Background="#FF1F2123">
+            <local:ToggleSwitch x:Name="tsKeyboardEmulation" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="80" Margin="0,10,0,0" MouseLeftButtonDown="tsKeyboardEmulation_MouseLeftButtonDown"/>
+            <Label Content="Keyboard Emulation" Foreground="White" HorizontalAlignment="Left" Margin="70,7,0,0" VerticalAlignment="Top"/>
+
+            <local:ToggleSwitch x:Name="tsDoDoubleMeasurements" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="80" Margin="0,40,0,0" MouseLeftButtonDown="tsDoDoubleMeasurements_MouseLeftButtonDown"/>
+            <Label Content="Double measurements" Foreground="White" HorizontalAlignment="Left" Margin="70,37,0,0" VerticalAlignment="Top"/>
+
+            <local:ToggleSwitch x:Name="tsDontFilterErrors" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="80" Margin="0,70,0,0" MouseLeftButtonDown="tsDontFilterErrors_MouseLeftButtonDown"/>
+            <Label Content="Don't filter errors" Foreground="White" HorizontalAlignment="Left" Margin="70,67,0,0" VerticalAlignment="Top"/>
+
+            <local:ToggleSwitch x:Name="tsOnlySendChanges" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="80" Margin="0,100,0,0" MouseLeftButtonDown="tsOnlySendChanges_MouseLeftButtonDown"/>
+            <Label Content="Only send changes" Foreground="White" HorizontalAlignment="Left" Margin="70,97,0,0" VerticalAlignment="Top"/>
+
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="127" Margin="10,347,0,0" VerticalAlignment="Top" Width="248" Background="#FF1F2123">
+            <ComboBox x:Name="cbUnits" HorizontalAlignment="Left" Height="22" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" SelectedIndex="0" ForceCursor="True" SelectionChanged="cbUnits_SelectionChanged">
+                <ListBoxItem Content="Feet &amp; Inches"/>
+                <ListBoxItem Content="Meters"/>
+                <ListBoxItem Content="Feet"/>
+                <ListBoxItem Content="Inches"/>
+                <ListBoxItem Content="Centimeters"/>
+            </ComboBox>
+            <Label Content="Measurement units" Foreground="White" HorizontalAlignment="Left" Margin="122,8,0,0" VerticalAlignment="Top"/>
+            <ComboBox x:Name="cbMeasurementMode" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="110" SelectedIndex="0" SelectionChanged="cbMeasurementMode_SelectionChanged">
+                <ListBoxItem Content="Continuous"/>
+                <ListBoxItem Content="Single"/>
+                <ListBoxItem Content="Interval"/>
+            </ComboBox>
+            <Label Content="Measurement mode" Foreground="White" HorizontalAlignment="Left" Margin="122,37,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbInterval" HorizontalAlignment="Left" Height="23" Margin="10,66,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="31" TextChanged="tbInterval_TextChanged"/>
+            <Label Content="Interval" Foreground="White" HorizontalAlignment="Left" Margin="122,64,0,0" VerticalAlignment="Top"/>
+            <ComboBox x:Name="cbIntervalUnits" HorizontalAlignment="Left" Margin="46,66,0,0" VerticalAlignment="Top" Width="74" SelectedIndex="0" SelectionChanged="cbIntervalUnits_SelectionChanged">
+                <ListBoxItem Content="Seconds"/>
+                <ListBoxItem Content="Minutes"/>
+                <ListBoxItem Content="Hours"/>
+            </ComboBox>
+            <ComboBox x:Name="cbTrigger" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="110" SelectedIndex="0" SelectionChanged="cbTrigger_SelectionChanged">
+                <ListBoxItem Content="&quot;Start&quot; Button"/>
+                <ListBoxItem Content="Caps Lock Key"/>
+                <ListBoxItem Content="Num Lock Key"/>
+                <ListBoxItem Content="Scroll Lock Key"/>
+            </ComboBox>
+            <Label Content="Trigger" Foreground="White" HorizontalAlignment="Left" Margin="122,93,0,0" VerticalAlignment="Top"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="73" Margin="10,269,0,0" VerticalAlignment="Top" Width="388" Background="#FF1F2123">
+            <ComboBox x:Name="cbRangeMode" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0" SelectionChanged="cbRangeMode_SelectionChanged">
+                <ListBoxItem Content="Short (0 - 1.3m)"/>
+                <ListBoxItem Content="Medium (0 - 2.9m)"/>
+                <ListBoxItem Content="Long (0 - 4m)"/>
+            </ComboBox>
+            <Label Content="Range mode" Foreground="White" HorizontalAlignment="Left" Margin="145,6,0,0" VerticalAlignment="Top" Width="116"/>
+            <Label Content="Accuracy:" Foreground="White" HorizontalAlignment="Left" Margin="244,6,0,0" VerticalAlignment="Top" Width="78"/>
+            <Label x:Name="lblMeasurementRate" Content="Measurement rate: 100 Hz" Foreground="White" HorizontalAlignment="Left" Margin="233,37,0,0" VerticalAlignment="Top" Width="158"/>
+            <Label Content="High" Foreground="White" HorizontalAlignment="Left" Margin="303,6,0,0" VerticalAlignment="Top" Width="60"/>
+            <Slider x:Name="slMeasurementRate" Style="{StaticResource MyCustomStyleForSlider}" HorizontalAlignment="Left" Margin="8,41,0,0" VerticalAlignment="Top" Width="220" ValueChanged="slMeasurementRate_ValueChanged" TickPlacement="BottomRight" Minimum="1" Maximum="100" TickFrequency="10" SmallChange="1"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="244" Margin="733,347,0,0" VerticalAlignment="Top" Width="209" Background="#FF1F2123">
+            <StackPanel x:Name="stackPanel10" Background="#FF1F2123" Margin="10,26,10,0" Height="191" VerticalAlignment="Top">
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockAttachStatus" Text="Searching..." Width="150" Foreground="White" />
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockManufacturer" Width="150" Foreground="White" />
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockModel" Width="150" Foreground="White" />
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockHwVersion" Width="150" Foreground="White" />
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockFwVersion" Width="150" Foreground="White" />
+                <TextBlock Height="16" HorizontalAlignment="Left" Margin="10,5,0,0" x:Name="textBlockSerialNumber" Width="150" Foreground="White" />
             </StackPanel>
-            <StackPanel Height="25" Name="stackPanel6" Width="180" Orientation="Horizontal">
-                <Label Content="Status Code:" Height="28" Name="label4" Width="120" Foreground="White" />
-                <TextBox Height="20" Name="textBoxStatus" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" />
-            </StackPanel>
-            <StackPanel Height="25" Name="stackPanel7" Width="180" Orientation="Horizontal">
-                <Label Content="Measurement Count:" Height="28" Name="label5" Width="120" Foreground="White" />
-                <TextBox Height="20" Name="textBoxCount" Width="60" IsReadOnly="True" HorizontalContentAlignment="Right" />
-            </StackPanel>
-            <GroupBox Header="Rangefinder Status" Name="groupBox1" Width="180" Foreground="White" Margin="0,20,0,0">
-                <Grid>
-                    <StackPanel Name="stackPanel10" Background="#FF35496A" Margin="2">
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockAttachStatus" Text="Searching..." Width="171" />
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockManufacturer" Width="171" />
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockModel" Width="171" />
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockHwVersion" Width="171" />
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockFwVersion" Width="171" />
-                        <TextBlock Height="16" HorizontalAlignment="Left" Margin="0,0,0,0" Name="textBlockSerialNumber" Width="171" />
-                    </StackPanel>
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-        <StackPanel Height="32" Name="stackPanel2" VerticalAlignment="Top" Background="#FF35496A" Orientation="Vertical"></StackPanel>
+            <Label Content="Rangefinder Device" HorizontalAlignment="Left" VerticalAlignment="Top" Width="142" Foreground="White"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="122" Margin="10,142,0,0" VerticalAlignment="Top" Width="388" Background="#FF1F2123">
+            <Label Content="Signal strength" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="10,10,0,0"/>
+            <local:BarMeter x:Name="BarSignalStrength" HorizontalAlignment="Left" Height="22" Margin="105,12,0,0" VerticalAlignment="Top" Width="146"/>
+            <TextBox x:Name="textBoxSignalStrength" HorizontalAlignment="Left" Height="22" Margin="250,12,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="65" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}"/>
+
+            <Label Content="Ambient IR" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="10,35,0,0"/>
+            <local:BarMeter x:Name="barAmbientIR" HorizontalAlignment="Left" Height="22" Margin="105,37,0,0" VerticalAlignment="Top" Width="146"/>
+            <TextBox x:Name="textBoxAmbientIR" HorizontalAlignment="Left" Height="22" Margin="250,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="65" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}"/>
+
+            <Label Content="Uncertainty" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="10,60,0,0"/>
+            <local:BarMeter x:Name="barUncertainty" HorizontalAlignment="Left" Height="22" Margin="105,62,0,0" VerticalAlignment="Top" Width="146"/>
+            <TextBox x:Name="textBoxUncertainty" HorizontalAlignment="Left" Height="22" Margin="250,62,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="65" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}"/>
+
+            <Label Content="Status Code" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="10,85,0,0"/>
+            <TextBox x:Name="textBoxStatus" IsReadOnly="True" Height ="22" HorizontalContentAlignment="Left" Margin="104,87,0,13" Background="#FF515151" BorderBrush="{x:Null}" Foreground="White" SelectionBrush="{x:Null}" HorizontalAlignment="Left" Width="74" />
+
+            <Label Content="Count" Height="28" x:Name="label5" Foreground="White" Margin="192,84,0,10" />
+            <TextBox x:Name="textBoxCount" Height="22" IsReadOnly="True" HorizontalContentAlignment="Left" Background="#FF515151" Margin="239,87,62,13" Foreground="White" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" />
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="122" Margin="10,15,0,0" VerticalAlignment="Top" Width="388" Background="#FF1F2123">
+            <Button Content="Start" x:Name="buttonStart" Width="71" Margin="62,41,255,43" Click="ButtonStartClick" IsEnabled="False" IsDefault="True" />
+            <TextBox x:Name="textBoxDistance" IsReadOnly="True" HorizontalContentAlignment="Right" Background="#FF515151" Foreground="#FFFF7F00" Margin="167,41,69,42" FontSize="24" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" />
+        </Grid>
+        <local:LineChart x:Name="rangeChart" HorizontalAlignment="Left" Height="327" Margin="403,15,0,0" VerticalAlignment="Top" Width="539"/>
+        <Grid HorizontalAlignment="Left" Height="112" Margin="10,479,0,0" VerticalAlignment="Top" Width="491" Background="#FF1F2123">
+            <Button x:Name="btnSaveConfig" Content="Save" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Click="btnSaveConfig_Click"/>
+            <Label Content="Write settings to rangefinder's flash" Foreground="White" HorizontalAlignment="Left" Margin="77,8,0,0" VerticalAlignment="Top" Width="223"/>
+            <Button Content="Firmware" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="75"/>
+            <Label Content="Check for rangefinder firmware update" Foreground="White" HorizontalAlignment="Left" Margin="77,37,0,0" VerticalAlignment="Top" Width="223"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="244" Margin="506,347,0,0" VerticalAlignment="Top" Width="222" Background="#FF1F2123">
+            <Canvas x:Name="canvasAim" HorizontalAlignment="Left" Height="180" Margin="8,56,0,0" VerticalAlignment="Top" Width="180" Background="#FF2F3133"/>
+            <local:RangeSlider x:Name="rsAimX" HorizontalAlignment="Left" Height="20" Margin="8,31,0,0" VerticalAlignment="Top" Width="180"/>
+            <local:RangeSlider x:Name="rsAimY" Height="20" Margin="115,131,-73,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                <local:RangeSlider.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </local:RangeSlider.RenderTransform>
+            </local:RangeSlider>
+            <Label Content="Beam steering:" Foreground="White" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top" Width="91"/>
+            <TextBox x:Name="textBoxSignalBeamSteering" HorizontalAlignment="Left" Height="22" Margin="90,6,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="77" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}"/>
+        </Grid>
     </Grid>
 </Window>

@@ -14,6 +14,7 @@
     <ProjectGuid>{3E35B897-EC76-425E-9174-D94184E6D37A}</ProjectGuid>
     <RootNamespace>LRMulti</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

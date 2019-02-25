@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace LxDemo {
+namespace LrDemo {
 	/// <summary>
 	/// Interaction logic for App.xaml
 	/// </summary>
