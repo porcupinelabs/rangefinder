@@ -48,15 +48,18 @@ namespace LrDemo
         {
             if (!LrfStarted)
             {
-                buttonStart.Content = "Stop";
-                LrfStarted = true;
                 lx4Device.SetConfigStart();
+                if (cbMeasurementMode.SelectedIndex != 1)   // Measurement Mode not Single
+                {
+                    buttonStart.Content = "Stop";
+                    LrfStarted = true;
+                }
             }
             else
             {
+                lx4Device.SetConfigStop();
                 buttonStart.Content = "Start";
                 LrfStarted = false;
-                lx4Device.SetConfigStop();
             }
         }
 
