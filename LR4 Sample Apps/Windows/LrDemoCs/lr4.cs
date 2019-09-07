@@ -181,6 +181,14 @@ namespace LrDemo
             }
         }
 
+        public void InvokeBootloader()
+        {
+            var report = lx4Device.CreateReport();
+            report.ReportId = 0x00;
+            report.Data[0] = 0x81;
+            lx4Device.WriteReport(report);
+        }
+
         private void BeginReadReport()
 	    {
 		    if (Interlocked.CompareExchange(ref _isReading, 1, 0) == 1)

@@ -400,5 +400,12 @@ namespace LrDemo
             if (lx4Device != null)
                 lx4Device.SaveConfig();
         }
+
+        private void btnFirmware_Click(object sender, RoutedEventArgs e)
+        {
+            FirmwareWindow popup = new FirmwareWindow(lx4Device);
+            popup.ShowDialog();
+            popup.Dispose();
+        }
     }
 }
