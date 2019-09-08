@@ -30,7 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnUpdateFromWeb = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnUpdateFromFile = new System.Windows.Forms.Button();
@@ -56,14 +56,15 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Latest firmware version:";
             // 
-            // button1
+            // btnUpdateFromWeb
             // 
-            this.button1.Location = new System.Drawing.Point(15, 82);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(160, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Update firmware from web";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnUpdateFromWeb.Location = new System.Drawing.Point(15, 82);
+            this.btnUpdateFromWeb.Name = "btnUpdateFromWeb";
+            this.btnUpdateFromWeb.Size = new System.Drawing.Size(160, 23);
+            this.btnUpdateFromWeb.TabIndex = 2;
+            this.btnUpdateFromWeb.Text = "Update firmware from web";
+            this.btnUpdateFromWeb.UseVisualStyleBackColor = true;
+            this.btnUpdateFromWeb.Click += new System.EventHandler(this.btnUpdateFromWebClicked);
             // 
             // label3
             // 
@@ -122,7 +123,7 @@
             this.Controls.Add(this.btnUpdateFromFile);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnUpdateFromWeb);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FirmwareWindow";
@@ -136,7 +137,7 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnUpdateFromWeb;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnUpdateFromFile;

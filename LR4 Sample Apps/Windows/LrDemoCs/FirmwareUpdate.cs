@@ -160,7 +160,7 @@ namespace LrDemo
                 if (ChunkData.Length < CHUNK_WRAPPER_SIZE)
                     break;  // No such thing as a partial chunk
 
-                MsgBox.AppendText("Chunk "+ Chunk + "\n");
+                MsgBox.AppendText("Flashing chunk "+ Chunk + "\n");
                 if (WriteChunkToBuffer(ChunkData) == false)
                 {
                     MsgBox.AppendText("Error writing chunk to buffer\n");

@@ -1,0 +1,22 @@
+[
+  {
+    "__type": "FwRelease:#LrDemo",
+    "Manufacturer": "Porcupine Labs",
+    "Product": "MicroLRF",
+    "HardwareVersion": "3",
+    "FirmwareVersion": "0.6.5",
+    "ReleaseDate": "2019-08-27",
+    "FileUrl": "https://raw.githubusercontent.com/porcupinelabs/rangefinder/master/Firmware/MicroLRF/MicroLrf%200.6.5.fw",
+    "FileName": "MicroLRF 0.6.5.fw"
+  },
+  {
+    "__type": "FwRelease:#LrDemo",
+    "Manufacturer": "Porcupine Labs",
+    "Product": "MicroLRF",
+    "HardwareVersion": "3",
+    "FirmwareVersion": "0.6.6",
+    "ReleaseDate": "2019-09-03",
+    "FileUrl": "https://raw.githubusercontent.com/porcupinelabs/rangefinder/master/Firmware/MicroLRF/MicroLrf%200.6.6.fw",
+    "FileName": "MicroLRF 0.6.6.fw"
+  }
+]
