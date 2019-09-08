@@ -23,6 +23,7 @@ namespace LrDemo
         private bool LrfStarted = false;
         private static int measurementCount = 0;
         private static double[] UnitsMuliplierTable = new double[5] {3.28084, 1.0, 3.28084, 39.3701, 100}; // 0=Feet/Inches, 1=Meters, 2=Feet, 3=Inches, 4=Centimeters
+        private string CurrentFirmwareVersion = "";
 
         public MainWindow()
         {
@@ -157,6 +158,7 @@ namespace LrDemo
             textBlockHwVersion.Text    = "Board: " + hwVer.TrimEnd(charsToTrim);
             textBlockFwVersion.Text    = "Firmware: " + fwVer.TrimEnd(charsToTrim);
             textBlockSerialNumber.Text = "Serial #: " + ser.TrimEnd(charsToTrim);
+            CurrentFirmwareVersion = fwVer.TrimEnd(charsToTrim);
         }
 
         private void HandleDistanceData(byte[] data)
@@ -218,6 +220,7 @@ namespace LrDemo
             }
 
             rangeChart.AddDataPoint((double)Millimeters/1000);
+            //Do logging here if enabled....................................
         }
 
 
@@ -403,7 +406,7 @@ namespace LrDemo
 
         private void btnFirmware_Click(object sender, RoutedEventArgs e)
         {
-            FirmwareWindow popup = new FirmwareWindow(lx4Device);
+            FirmwareWindow popup = new FirmwareWindow(lx4Device, CurrentFirmwareVersion);
             popup.ShowDialog();
             popup.Dispose();
         }
