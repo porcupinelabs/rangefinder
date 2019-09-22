@@ -186,8 +186,8 @@
             <Label Content="Write settings to rangefinder's flash" Foreground="White" HorizontalAlignment="Left" Margin="77,8,0,0" VerticalAlignment="Top" Width="223"/>
             <Button Content="Firmware" HorizontalAlignment="Left" Margin="0,68,0,0" VerticalAlignment="Top" Width="75" Click="btnFirmware_Click"/>
             <Label Content="Check for rangefinder firmware update" Foreground="White" HorizontalAlignment="Left" Margin="77,66,0,0" VerticalAlignment="Top" Width="223"/>
-            <Button Content="Logging" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.053,1"/>
-            <Label Content="Log range data to a file" Foreground="White" HorizontalAlignment="Left" Margin="77,37,0,0" VerticalAlignment="Top" Width="223"/>
+            <Button x:Name="btnLog" Content="Start Log" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.053,1" Click="btn_LogginClick"/>
+            <Label x:Name="lblLog" Content="Log range data to a file" Foreground="White" HorizontalAlignment="Left" Margin="77,37,0,0" VerticalAlignment="Top" Width="287"/>
         </Grid>
         <Grid HorizontalAlignment="Left" Height="244" Margin="506,347,0,0" VerticalAlignment="Top" Width="222" Background="#FF1F2123">
             <Canvas x:Name="canvasAim" HorizontalAlignment="Left" Height="180" Margin="8,56,0,0" VerticalAlignment="Top" Width="180" Background="#FF2F3133"/>

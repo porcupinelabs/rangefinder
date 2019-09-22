@@ -24,6 +24,9 @@ namespace LrDemo
         private static int measurementCount = 0;
         private static double[] UnitsMuliplierTable = new double[5] {3.28084, 1.0, 3.28084, 39.3701, 100}; // 0=Feet/Inches, 1=Meters, 2=Feet, 3=Inches, 4=Centimeters
         private string CurrentFirmwareVersion = "";
+        private bool LoggingIsActive = false;
+        private StreamWriter LogFileStream;
+
 
         public MainWindow()
         {
@@ -165,9 +168,14 @@ namespace LrDemo
         {
             double Feet, Inches, Meters, Centimeters;
             int iFeet;
+            string Measurement;
+            string TimeStamp = "";
+
+            if (LoggingIsActive)
+                TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
             ++measurementCount;
             textBoxCount.Text = System.Convert.ToString(measurementCount);
-
             int Millimeters = (data[2] << 8) + data[1];
             switch (cbUnits.SelectedIndex)
             {
@@ -175,26 +183,31 @@ namespace LrDemo
                     Inches = Millimeters / 25.4;
                     iFeet = (int)(Inches / 12);
                     Inches -= iFeet * 12;
-                    textBoxDistance.Text = String.Format("{0:0}' {1:F1}\"", iFeet, Inches);
+                    Measurement = String.Format("{0:0}' {1:F1}\"", iFeet, Inches);
+                    textBoxDistance.Text = Measurement;
                     break;
                 case 1:         // Meters
                     Meters = (double)Millimeters * 0.001;
-                    textBoxDistance.Text = String.Format("{0:F3} m", Meters);
+                    Measurement = String.Format("{0:F3}", Meters);
+                    textBoxDistance.Text = Measurement + " m";
                     break;
                 case 2:         // Feet
                     Feet = ((double)Millimeters / 25.4) / 12;
-                    textBoxDistance.Text = String.Format("{0:F2}'", Feet);
+                    Measurement = String.Format("{0:F2}", Feet);
+                    textBoxDistance.Text = Measurement + "'";
                     break;
                 case 3:         // Inches
                     Inches = (double)Millimeters / 25.4;
-                    textBoxDistance.Text = String.Format("{0:F1}\"", Inches);
+                    Measurement = String.Format("{0:F1}", Inches);
+                    textBoxDistance.Text = Measurement + "\"";
                     break;
                 case 4:         // Centimeters
                     Centimeters = (double)Millimeters / 10;
-                    textBoxDistance.Text = String.Format("{0:F1} cm", Centimeters);
+                    Measurement = String.Format("{0:F1}", Centimeters);
+                    textBoxDistance.Text = Measurement + " cm";
                     break;
-               default:        // Error
-                    textBoxDistance.Text = "Error";
+                default:        // Error
+                    Measurement = textBoxDistance.Text = "Error";
                     break;
             }
 
@@ -216,11 +229,13 @@ namespace LrDemo
 
                 double Uncertainty = data[5];
                 barUncertainty.SetBarPercent(Uncertainty);
-                textBoxUncertainty.Text = String.Format("{0:F1}mm", Uncertainty/10);
+                textBoxUncertainty.Text = String.Format("{0:F1}mm", Uncertainty / 10);
             }
 
-            rangeChart.AddDataPoint((double)Millimeters/1000);
-            //Do logging here if enabled....................................
+            rangeChart.AddDataPoint((double)Millimeters / 1000);
+
+            if (LoggingIsActive)
+                LogFileStream.WriteLine(TimeStamp + ", " + Measurement);
         }
 
 
@@ -409,6 +424,25 @@ namespace LrDemo
             FirmwareWindow popup = new FirmwareWindow(lx4Device, CurrentFirmwareVersion);
             popup.ShowDialog();
             popup.Dispose();
+        }
+
+        private void btn_LogginClick(object sender, RoutedEventArgs e)
+        {
+            if (LoggingIsActive)
+            {
+                LogFileStream.Close();
+                btnLog.Content = "Start Log";
+                lblLog.Content = "Log range data to a file";
+                LoggingIsActive = false;
+            }
+            else
+            {
+                var Filename = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".csv";
+                LogFileStream = new StreamWriter(Filename, true);
+                btnLog.Content = "Stop Log";
+                lblLog.Content = "Logging data to " + Filename;
+                LoggingIsActive = true;
+            }
         }
     }
 }
