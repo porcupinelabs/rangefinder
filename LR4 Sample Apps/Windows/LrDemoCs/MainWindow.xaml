@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:LrDemo" x:Class="LrDemo.MainWindow"
-    Title="LrDemo" Height="640" Width="960 " Background="#FF13171A">
+    Title="LrDemoCs v1.00" Height="640" Width="960 " Background="#FF13171A">
 
     <Window.Resources>
         <SolidColorBrush x:Key="HorizontalSliderTrackNormalBackground" Color="#FFFF7F00"/>
