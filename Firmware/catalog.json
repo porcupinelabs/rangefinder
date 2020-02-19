@@ -18,5 +18,15 @@
     "ReleaseDate": "2019-09-03",
     "FileUrl": "https://raw.githubusercontent.com/porcupinelabs/rangefinder/master/Firmware/MicroLRF/MicroLrf%200.6.6.fw",
     "FileName": "MicroLRF 0.6.6.fw"
+  },
+  {
+    "__type": "FwRelease:#LrDemo",
+    "Manufacturer": "Porcupine Labs",
+    "Product": "MicroLRF",
+    "HardwareVersion": "4",
+    "FirmwareVersion": "1.0.0",
+    "ReleaseDate": "2020-02-16",
+    "FileUrl": "https://raw.githubusercontent.com/porcupinelabs/rangefinder/master/Firmware/MicroLRF/MicroLrf%201.0.0.fw",
+    "FileName": "MicroLRF 1.0.0.fw"
   }
 ]
