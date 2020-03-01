@@ -35,3 +35,5 @@ These top level folders contain source code relevant to various OSs and environm
 - LRMultiLog - Opens all LR4 devices and logs data from each one in a separate CSV file along with a date/time stamp.
 
 - LRTimeLog - Used for logging measurements at longer intervals longer than 30 seconds.  The laser is off most of the time, and only turned on while taking a measurement.
+
+- LrUserDefData - Demonstrates how to get / set the MicroLRF's user defined data.  User defined data is a simple way to name a rangefinder.  This is useful in applications that use multiple rangefinders.  For example on a robot with three rangefinders, user defined data could be set to 'left', 'right', and 'front' so the application can identify each rangefinder.
