@@ -63,17 +63,44 @@ void ctrl_c_handler(int s) {
   complete = 1;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
 
   /* Setup CTRL+C handler */
   struct sigaction sigIntHandler;
+  int opt;
+  char *hidFile = "/dev/hidraw1";
+
   sigIntHandler.sa_handler = ctrl_c_handler;
   sigemptyset(&sigIntHandler.sa_mask);
   sigIntHandler.sa_flags = 0;
   sigaction(SIGINT, &sigIntHandler, NULL);
 
+  while ((opt = getopt(argc, argv, "D:")) != -1)
+  {
+    switch (opt)
+    {
+    case 'D':
+      hidFile = optarg;
+      break;
+     case '?':
+       if (optopt == 'D') {
+         fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+       }
+       return -1;
+    default:
+      printf("Unknown option: %c\n", opt);
+      break;
+
+    }
+  }
+
   /* Open HID device file for read/write */
-  filehandle = open("/dev/hidraw1",O_RDWR);
+  filehandle = open(hidFile, O_RDWR);
+
+  if (filehandle < 0) {
+    printf("Failed to open '%s'\n", hidFile);
+    exit(-1);
+  }
 
   /****************
    * Read current config
